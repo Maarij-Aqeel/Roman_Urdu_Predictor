@@ -67,7 +67,7 @@ Below are visual examples of the deployed Roman Urdu LSTM predictor in action. T
 
 ## Observations
 
-- Iteration 2 achieved highest training performance but showed overfitting.
+- Iteration 4 and 5 achieved highest training performance but showed overfitting.
 - Final iteration prioritized generalization using more data and better regularization.
 - Model performs well on idioms, cultural phrases, and informal text patterns.
 
