@@ -56,6 +56,8 @@ Below are visual examples of the deployed Roman Urdu LSTM predictor in action. T
 ### 🔹 Typing Interface with Inline Prediction
 
 ![Typing Prediction Demo](images/typing_prediction.png)
+![Typing Prediction Demo](images/typing_prediction_2.png)
+
 
 
 > *Note: UI images are from the live version of the deployed model.*
