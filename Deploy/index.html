@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Roman Urdu Predictive Keyboard</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: { primary: "#4A90E2", secondary: "#F0F4F8" },
+            borderRadius: {
+              none: "0px",
+              sm: "4px",
+              DEFAULT: "8px",
+              md: "12px",
+              lg: "16px",
+              xl: "20px",
+              "2xl": "24px",
+              "3xl": "32px",
+              full: "9999px",
+              button: "8px",
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+    />
+    <style>
+      :where([class^="ri-"])::before { content: "\f3c2"; }
+      body {
+          font-family: 'Inter', sans-serif;
+          background-color: #FAFBFC;
+      }
+      .prediction-container {
+          scrollbar-width: thin;
+          scrollbar-color: #CBD5E0 transparent;
+      }
+      .prediction-container::-webkit-scrollbar {
+          height: 6px;
+      }
+      .prediction-container::-webkit-scrollbar-track {
+          background: transparent;
+      }
+      .prediction-container::-webkit-scrollbar-thumb {
+          background-color: #fff8f8;
+          border-radius: 20px;
+      }
+      .input-wrapper {
+          position: relative;
+          border: 2px solid #000000;
+          border-radius: 8px;
+          transition: border-color 0.2s ease;
+      }
+      .input-wrapper:focus-within {
+          border-color: #4A90E2;
+      }
+      .prediction-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          pointer-events: none;
+          color: #A0AEC0;
+          font-size: 1.125rem;
+          padding: 1rem;
+          white-space: pre-wrap;
+          word-wrap: break-word;
+          overflow: hidden;
+          z-index: 1;
+      }
+      .typing-input {
+          background-color: transparent;
+          position: relative;
+          z-index: 2;
+          color: #2D3748;
+      }
+      .prediction-card {
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+      .prediction-card:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      }
+      @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+      }
+      .fade-in {
+          animation: fadeIn 0.3s ease-in-out;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <header class="bg-white shadow-sm py-4">
+      <div class="container mx-auto px-4 flex items-center justify-between">
+        <div class="flex items-center">
+          <h1 class="text-2xl font-['Pacifico'] text-primary">logo</h1>
+        </div>
+        <nav class="hidden md:flex space-x-6">
+          <a href="#" class="text-gray-700 hover:text-primary font-medium"
+            >Home</a
+          >
+          <a href="#" class="text-gray-700 hover:text-primary font-medium"
+            >Features</a
+          >
+          <a href="#" class="text-gray-700 hover:text-primary font-medium"
+            >About</a
+          >
+          <a href="#" class="text-gray-700 hover:text-primary font-medium"
+            >Contact</a
+          >
+        </nav>
+        <div class="md:hidden w-8 h-8 flex items-center justify-center">
+          <i class="ri-menu-line text-gray-700 ri-lg"></i>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-grow flex flex-col items-center justify-center px-4 py-12"
+    >
+      <div class="w-full max-w-3xl mx-auto">
+        <div class="text-center mb-10 p-6 rounded-lg shadow-md">
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-3">
+            Roman Urdu Predictive Keyboard
+          </h2>
+          <p class="text-gray-600 max-w-xl mx-auto">
+            Type in Roman Urdu and get intelligent word predictions. Press Tab
+            to accept suggestions.
+          </p>
+        </div>
+
+        <div class="bg-gray-100 rounded-lg shadow-md p-6 mb-6">
+          <div class="input-wrapper relative mb-6">
+            <div
+              id="predictionOverlay"
+              class="prediction-overlay"
+            ></div>
+            <input
+              type="text"
+              id="typingInput"
+              class="typing-input w-full text-lg p-4 border-none outline-none rounded-button"
+              placeholder="Start typing in Roman Urdu..."
+              autocomplete="off"
+            />
+          </div>
+
+          <div class="prediction-container overflow-x-auto pb-2">
+            <div id="predictionsRow" class="flex space-x-3 min-w-full">
+              <!-- Predictions will be dynamically inserted here -->
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-gray-200 rounded-lg shadow-md p-6">
+          <h3 class="text-xl font-semibold text-gray-800 mb-4">How to Use</h3>
+          <ul class="space-y-2 text-gray-600">
+            <li class="flex items-start">
+              <div
+                class="w-6 h-6 flex items-center justify-center text-primary mr-2 mt-0.5"
+              >
+                <i class="ri-arrow-right-line"></i>
+              </div>
+              <span>Type any Roman Urdu text in the input field above</span>
+            </li>
+            <li class="flex items-start">
+              <div
+                class="w-6 h-6 flex items-center justify-center text-primary mr-2 mt-0.5"
+              >
+                <i class="ri-arrow-right-line"></i>
+              </div>
+              <span>See predictions appear in real-time as you type</span>
+            </li>
+            <li class="flex items-start">
+              <div
+                class="w-6 h-6 flex items-center justify-center text-primary mr-2 mt-0.5"
+              >
+                <i class="ri-arrow-right-line"></i>
+              </div>
+              <span
+                >Press
+                <kbd class="bg-gray-100 px-2 py-0.5 rounded text-sm">Tab</kbd>
+                to accept the inline prediction</span
+              >
+            </li>
+            <li class="flex items-start">
+              <div
+                class="w-6 h-6 flex items-center justify-center text-primary mr-2 mt-0.5"
+              >
+                <i class="ri-arrow-right-line"></i>
+              </div>
+              <span>Click on any prediction card to insert it into your text</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-8">
+      <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <div class="mb-4 md:mb-0">
+            <h2 class="text-xl font-['Pacifico'] text-white mb-2">logo</h2>
+            <p class="text-gray-400 text-sm">
+              Intelligent Roman Urdu Predictions
+            </p>
+          </div>
+          <div class="flex space-x-4">
+            <a
+              href="#"
+              class="w-10 h-10 flex items-center justify-center bg-gray-700 rounded-full hover:bg-primary transition-colors"
+            >
+              <i class="ri-twitter-fill text-white"></i>
+            </a>
+            <a
+              href="#"
+              class="w-10 h-10 flex items-center justify-center bg-gray-700 rounded-full hover:bg-primary transition-colors"
+            >
+              <i class="ri-facebook-fill text-white"></i>
+            </a>
+            <a
+              href="#"
+              class="w-10 h-10 flex items-center justify-center bg-gray-700 rounded-full hover:bg-primary transition-colors"
+            >
+              <i class="ri-instagram-fill text-white"></i>
+            </a>
+          </div>
+        </div>
+        <div
+          class="border-t border-gray-700 mt-6 pt-6 text-center text-gray-400 text-sm"
+        >
+          <p>© 2025 Roman Urdu Keyboard. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+
+
+    <script id="keyboardFunctionality" src="script.js"></script>
+    <script id="keyboardFunctionality"></script>
+  </body>
+</html>

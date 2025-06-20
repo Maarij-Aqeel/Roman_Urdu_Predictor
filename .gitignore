@@ -1,0 +1,8 @@
+__pycache__
+.venv
+.venv/
+venv/
+*.pyc
+__pycache__/
+Roman_urdu_predictor_Final.pth
+Roman_urdu_predictor.pth
