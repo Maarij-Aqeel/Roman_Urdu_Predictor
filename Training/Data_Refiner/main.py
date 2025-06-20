@@ -222,35 +222,35 @@ def validate_and_fix_sentences(sentences: List[str], api_key: str,
 # Example usage and main function
 def main():
     # Configuration
-    API_KEY = "AIzaSyD8qHygtmEhG84PmnxbfZJmYOTTp3YU7gs"  # Replace with your actual API key
+    API_KEY = ""  
     
     # Example: Create a sample dataframe (replace with your actual data)
-    temp = {
-        'normalized': [
-            'ye kya hai ?',
-            'wo kya hai ?',
-            'idhar aa .',
-            'udhar ja .',
-            'ye mera ghar hai .',
-            'wo mera dost hai .',
-            'kya aap thak gaye hain ?',
-            'mein thak gaya hoon .',
-            'mujhy neend aa rahi hai .',
-            'subah ho gayi hai .',
-            'raat ho gayi hai .',
-            'aaj garmi hai .',
-            'aaj sardi hai .',
-            'barish ho rahi hai .',
-            'hawa chal rahi hai .',
-            'kya aap ko bhook lagi hai ?',
-            'kya aap ko pyas lagi hai ?',
-            'mujhy pyas lagi hai .',
-            'pani do .',
-            'khana ready hai .',
-            'chalo khana khate hain .',
-            'maza aaya .'
-        ]
-    }
+    # temp = {
+    #     'normalized': [
+    #         'ye kya hai ?',
+    #         'wo kya hai ?',
+    #         'idhar aa .',
+    #         'udhar ja .',
+    #         'ye mera ghar hai .',
+    #         'wo mera dost hai .',
+    #         'kya aap thak gaye hain ?',
+    #         'mein thak gaya hoon .',
+    #         'mujhy neend aa rahi hai .',
+    #         'subah ho gayi hai .',
+    #         'raat ho gayi hai .',
+    #         'aaj garmi hai .',
+    #         'aaj sardi hai .',
+    #         'barish ho rahi hai .',
+    #         'hawa chal rahi hai .',
+    #         'kya aap ko bhook lagi hai ?',
+    #         'kya aap ko pyas lagi hai ?',
+    #         'mujhy pyas lagi hai .',
+    #         'pani do .',
+    #         'khana ready hai .',
+    #         'chalo khana khate hain .',
+    #         'maza aaya .'
+    #     ]
+    # }
     df=pd.read_csv('./Final_normalized.csv')
     # df=pd.DataFrame(temp)
     try:
@@ -268,13 +268,13 @@ def main():
         for i, sentence in enumerate(refined_sentences):
             print(f"{i+1}. {sentence}")
         
-        # # Step 2: Validate and fix individual sentences
-        # print("\n=== Step 2: Individual Validation ===")
-        # final_sentences = validate_and_fix_sentences(
-        #     sentences=refined_sentences,
-        #     api_key=API_KEY,
-        #     delay=2.05
-        # )
+        # Step 2: Validate and fix individual sentences
+        print("\n=== Step 2: Individual Validation ===")
+        final_sentences = validate_and_fix_sentences(
+            sentences=refined_sentences,
+            api_key=API_KEY,
+            delay=2.05
+        )
         final_sentences=refined_sentences
         print(f"\nFinal sentences: {len(final_sentences)}")
         for i, sentence in enumerate(final_sentences):
@@ -295,5 +295,4 @@ if __name__ == "__main__":
     # Run the main function
     final_dataset = main()
     
-    # Print summary
     print(f"\nProcess completed. Generated {len(final_dataset)} refined sentences.")
